@@ -14,17 +14,6 @@ public class App
     {
         
         Scanner sc = new Scanner(System.in);
-		System.out.println("Enter student id: ");
-		int student_id = sc.nextInt();
-		System.out.println("Enter student name: ");
-		String student_Name = sc.next();
-		sc.nextLine();
-		System.out.println("Enter student emailId: ");
-		String student_email = sc.next();
-		System.out.println("Enter student age: ");
-		int student_age = sc.nextInt();
-		System.out.println("Enter student mobile: ");
-		long student_mobile_number = sc.nextLong();
     	
         try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -49,16 +38,20 @@ public class App
 	                        System.out.print("Enter student id: ");
 	                        int id = sc.nextInt();
 	                        System.out.print("Enter student name: ");
-	                        String name = sc.nextLine();
+	                        String name = sc.next();
+	                        sc.nextLine();
 	                        System.out.print("Enter student emailId: ");
 	                        String email = sc.next();
 	                        System.out.print("Enter student age: ");
 	                        int age = sc.nextInt();
 	                        System.out.print("Enter student mobile: ");
 	                        long mobile = sc.nextLong();
-
+	                        try {
 	                        mysqlDAO.addNewStudent(connection, id, name, email, age, mobile);
-	                        System.out.println("Student added successfully!");
+	                        System.out.println("Student added successfully!");}
+	                        catch (InvalidStudentException e) {
+	                			System.out.println(e);
+	                		}
 	                        break;
 
 	                    case 2:
@@ -77,8 +70,11 @@ public class App
 	                        sc.nextLine(); 
 	                        System.out.print("Enter new emailId: ");
 	                        String emailId = sc.next();
-
-	                        mysqlDAO.updateStudent(connection, mobileNumber, emailId); 
+	                        try {
+	                        mysqlDAO.updateStudent(connection, mobileNumber, emailId); }
+	                        catch (InvalidStudentException e) {
+	                			System.out.println(e);
+	                		}
 	                        break;
 
 	                    case 5:
@@ -95,11 +91,7 @@ public class App
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (InvalidStudentException e) {
-			e.printStackTrace();
 		}
-
-		
 
     }
 }
