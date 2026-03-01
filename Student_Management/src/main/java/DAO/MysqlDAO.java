@@ -79,15 +79,28 @@ public class MysqlDAO implements StudentDAO{
 		
 	}
 
-	public void updateStudent(Connection connection,long mobileNumber, String emailId) {
+	public void updateStudent(Connection connection,long mobileNumber, String emailId) throws InvalidStudentException{
+		
+		if(!emailId.contains("@")) {
+			throw new InvalidStudentException("emailid must contain @");
+		}
+		
 		String update = "update student_details set Student_email=? where Student_mobile_number=?";
 		
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement(update);
 			
 			preparedStatement.setString(1, emailId);
+			preparedStatement.setLong(2, mobileNumber);
 			
-			preparedStatement.executeUpdate();
+
+	        int rows = preparedStatement.executeUpdate();
+
+	        if (rows == 0) {
+	            System.out.println("No student found with this mobile number.");
+	        } else {
+	            System.out.println("Student updated successfully.");
+	        }
 			
 		} catch (SQLException e) {
 
@@ -103,7 +116,11 @@ public class MysqlDAO implements StudentDAO{
 			
 			preparedStatement.setInt(1, id);
 			
-			preparedStatement.executeUpdate();
+			int rows = preparedStatement.executeUpdate();
+			
+			if(rows>0) {
+				System.out.println("");
+			}
 			
 		} catch (SQLException e) {
 
